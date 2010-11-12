@@ -1,21 +1,14 @@
 var FlashHeed = (function(window) {
     
+    var document = window.document;
+    
     var gsub = function(string, pattern, replacement) {
         var result = '', source = string, match;
-        //replacement = prepareReplacement(replacement);
-
-        //if (Object.isString(pattern))
-        //    pattern = RegExp.escape(pattern);
-
-        //if (!(pattern.length || pattern.source)) {
-        //    replacement = replacement('');
-        //    return replacement + source.split('').join(replacement) + replacement;
-        //}
         
         while (source.length > 0) {
             if (match = source.match(pattern)) {
                 result += source.slice(0, match.index);
-                //result += String.interpret(replacement(match));
+                result += replacement;
                 source  = source.slice(match.index + match[0].length);
             } else {
                 result += source, source = '';
@@ -25,7 +18,8 @@ var FlashHeed = (function(window) {
     };
     
     var heed = function(el) {
-        if(el === undefined) var el = window.document;
+        if(el === undefined) var el = document;
+        
         
         var objects = el.getElementsByTagName('object');
         var len = objects.length;
@@ -76,17 +70,20 @@ var FlashHeed = (function(window) {
                 }
 
                 // Totally remove the object tag from the dom
-                o.remove();
+                pn.removeChild(o);
 
                 // Add it to our new div, only to clobber it immediately.
-                // This is the only way I've found to force IE to unrender the object.
+                // This is the only way we've found to force IE to unrender the object.
                 // We use a new container for this because you can't mess with the innerhtml
                 // of an object tag. (throws a runtime error)
-                var div = new Element('div').update(o);
+                var div = document.createElement("div");
+                //div.inner
+                //var div = new Element('div').update(o);
+                div.appendChild(o);
                 div.innerHTML = '';
 
                 // Update it with our new HTML that has the correct param tag
-                div.update(html);
+                div.innerHTML = html;
 
                 // Finally, insert this new div back in the original spot
                 pn.insertBefore(div, nx);
