@@ -77,8 +77,6 @@ var FlashHeed = (function(window) {
                 // We use a new container for this because you can't mess with the innerhtml
                 // of an object tag. (throws a runtime error)
                 var div = document.createElement("div");
-                //div.inner
-                //var div = new Element('div').update(o);
                 div.appendChild(o);
                 div.innerHTML = '';
 
